@@ -78,6 +78,10 @@ public class Player implements GameObject {
         this.velocity = velocity;
     }
 
+    public void increaseVelocity(float velocity) {
+        this.velocity += velocity;
+    }
+
     private void setPosition() {
         currentSprite.setPosition(PLAYER_INIT_X_POS, PLAYER_INIT_Y_POS);
     }

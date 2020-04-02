@@ -25,7 +25,11 @@ public class GameScreen extends AbstractScreen {
     private Label gameOverLabel;
 
     private float timeElapsed;
+    private float obstacleCreationTimeElapsed;
+    private float lastAccelerationTimeElapsed;
+    private float accelerationCount;
     private boolean failure;
+    private boolean pause;
 
     public GameScreen(SpinnerGame game) {
         super(game);
@@ -34,6 +38,9 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void create() {
         timeElapsed = 0;
+        obstacleCreationTimeElapsed = 0;
+        lastAccelerationTimeElapsed = 0;
+        accelerationCount = 0;
         background = createBackground();
         mainStage.addActor(background);
 
@@ -49,16 +56,8 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void update(float delta) {
-        timeElapsed += delta;
-        timeLabel.setText("Time: " + (int)timeElapsed);
-
-        if (timeElapsed > OBSTACLE_CREATION_INTERVAL) {
-            timeElapsed = 0;
-            obstacles.add(new Obstacle());
-        }
-        player.update(delta);
-        for (Obstacle obstacle : obstacles) {
-            obstacle.update(delta);
+        if (pause) {
+            return;
         }
 
         for (Obstacle obstacle : obstacles) {
@@ -73,6 +72,29 @@ public class GameScreen extends AbstractScreen {
                 explosion = new Explosion(player.getX(), player.getY());
             }
             explosion.update(delta);
+
+            return;
+        }
+
+        timeElapsed += delta;
+        obstacleCreationTimeElapsed += delta;
+        lastAccelerationTimeElapsed += delta;
+        timeLabel.setText("Time: " + (int)timeElapsed);
+
+        if (obstacleCreationTimeElapsed > OBSTACLE_CREATION_INTERVAL) {
+            obstacleCreationTimeElapsed = 0;
+            Obstacle obstacle = new Obstacle();
+
+            if (lastAccelerationTimeElapsed > 5) {
+                lastAccelerationTimeElapsed = 0;
+                accelerationCount++;
+                obstacle.increaseVelocity(-10 * accelerationCount);
+            }
+            obstacles.add(obstacle);
+        }
+        player.update(delta);
+        for (Obstacle obstacle : obstacles) {
+            obstacle.update(delta);
         }
     }
 
@@ -122,12 +144,16 @@ public class GameScreen extends AbstractScreen {
             game.setScreen(new MenuScreen(game));
         }
 
+        if (keycode == Keys.P) {
+            togglePause();
+        }
+
         if (keycode == Keys.DOWN) {
-            player.setVelocity(-250);
+            player.setVelocity(-250 + -accelerationCount * 5);
         }
 
         if (keycode == Keys.UP) {
-            player.setVelocity(250);
+            player.setVelocity(250 + accelerationCount * 5);
         }
 
         return false;
@@ -139,7 +165,7 @@ public class GameScreen extends AbstractScreen {
             player.setVelocity(0);
 
             if (Gdx.input.isKeyPressed(Keys.UP)) {
-                player.setVelocity(250);
+                player.setVelocity(250 + accelerationCount * 5);
             }
         }
 
@@ -147,10 +173,14 @@ public class GameScreen extends AbstractScreen {
             player.setVelocity(0);
 
             if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-                player.setVelocity(-250);
+                player.setVelocity(-250 + -accelerationCount * 5);
             }
         }
 
         return false;
+    }
+
+    private void togglePause() {
+        pause = !pause;
     }
 }

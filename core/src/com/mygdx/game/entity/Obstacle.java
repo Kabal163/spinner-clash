@@ -42,11 +42,12 @@ public class Obstacle implements GameObject {
 
     @Override
     public boolean isCollided(GameObject anotherObject) {
-        currentSprite.setSize(currentSprite.getWidth() / 3, currentSprite.getHeight() / 3);
-        boolean overlaps = currentSprite.getBoundingRectangle().overlaps(anotherObject.getCollider());
-        setSize();
+        Rectangle collider = anotherObject.getCollider();
 
-        return overlaps;
+        return currentSprite.getX() < collider.getX() + collider.width / 2 &&
+                currentSprite.getX() + currentSprite.getWidth() / 2 > collider.x &&
+                currentSprite.getY() < collider.y + collider.height / 2 &&
+                currentSprite.getY() + currentSprite.getHeight() / 2 > collider.y;
     }
 
     @Override
@@ -57,6 +58,14 @@ public class Obstacle implements GameObject {
     @Override
     public ObjectTag getTag() {
         return OBSTACLE;
+    }
+
+    public void setVelocity(float velocity) {
+        this.velocity = velocity;
+    }
+
+    public void increaseVelocity(float velocity) {
+        this.velocity += velocity;
     }
 
     private void setPosition() {
