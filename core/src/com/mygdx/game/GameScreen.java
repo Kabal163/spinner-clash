@@ -88,8 +88,8 @@ public class GameScreen extends AbstractScreen {
             if (lastAccelerationTimeElapsed > 5) {
                 lastAccelerationTimeElapsed = 0;
                 accelerationCount++;
-                obstacle.increaseVelocity(-10 * accelerationCount);
             }
+            obstacle.increaseVelocity(-10 * accelerationCount);
             obstacles.add(obstacle);
         }
         player.update(delta);
