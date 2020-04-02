@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.GameObject;
 import com.mygdx.game.ObjectTag;
 
@@ -43,7 +42,11 @@ public class Obstacle implements GameObject {
 
     @Override
     public boolean isCollided(GameObject anotherObject) {
-        return currentSprite.getBoundingRectangle().overlaps(anotherObject.getCollider());
+        currentSprite.setSize(currentSprite.getWidth() / 3, currentSprite.getHeight() / 3);
+        boolean overlaps = currentSprite.getBoundingRectangle().overlaps(anotherObject.getCollider());
+        setSize();
+
+        return overlaps;
     }
 
     @Override

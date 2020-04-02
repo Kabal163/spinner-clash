@@ -17,4 +17,10 @@ public final class Config {
     public static final float OBSTACLE_WIDTH = 150;
 
     public static final float OBSTACLE_CREATION_INTERVAL = 2;
+
+    public static final float DEFAULT_FRAME_LENGTH = 0.2f;
+
+    public static final float EXPLOSION_FRAME_LENGTH = 0.08f;
+    public static final int EXPLOSION_HEIGHT = 130;
+    public static final int EXPLOSION_WIDTH = 130;
 }

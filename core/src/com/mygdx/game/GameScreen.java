@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.mygdx.game.entity.Explosion;
 import com.mygdx.game.entity.Obstacle;
 import com.mygdx.game.entity.Player;
 
@@ -18,8 +19,10 @@ public class GameScreen extends AbstractScreen {
 
     private Actor background;
     private Player player;
+    private Explosion explosion;
     private Set<Obstacle> obstacles;
     private Label timeLabel;
+    private Label gameOverLabel;
 
     private float timeElapsed;
     private boolean failure;
@@ -39,6 +42,9 @@ public class GameScreen extends AbstractScreen {
 
         timeLabel = createTimeLabel();
         uiStage.addActor(timeLabel);
+
+        gameOverLabel = createGameOverLabel();
+        uiStage.addActor(gameOverLabel);
     }
 
     @Override
@@ -54,12 +60,32 @@ public class GameScreen extends AbstractScreen {
         for (Obstacle obstacle : obstacles) {
             obstacle.update(delta);
         }
+
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle.isCollided(player)) {
+                failure = true;
+            }
+        }
+
+        if (failure) {
+            gameOverLabel.setVisible(true);
+            if (explosion == null) {
+                explosion = new Explosion(player.getX(), player.getY());
+            }
+            explosion.update(delta);
+        }
     }
 
     @Override
     public void renderScene(float delta) {
         game.batch.begin();
-        player.draw(game.batch);
+
+        if (!failure) {
+            player.draw(game.batch);
+        } else if (!explosion.isEnded()) {
+            explosion.draw(game.batch);
+        }
+
         for (Obstacle obstacle : obstacles) {
             obstacle.draw(game.batch);
         }
@@ -75,6 +101,19 @@ public class GameScreen extends AbstractScreen {
         timeLabel.setPosition(500, 440);
 
         return timeLabel;
+    }
+
+    private Label createGameOverLabel() {
+        BitmapFont font = new BitmapFont();
+        String text = "GAME OVER";
+        Label.LabelStyle style = new Label.LabelStyle(font, NAVY);
+        Label gameOverLabel = new Label(text, style);
+        gameOverLabel.setFontScale(4);
+        gameOverLabel.setPosition(100, 240);
+        gameOverLabel.setVisible(false);
+
+
+        return gameOverLabel;
     }
 
     @Override

@@ -66,6 +66,14 @@ public class Player implements GameObject {
         return PLAYER;
     }
 
+    public float getX() {
+        return currentSprite.getX();
+    }
+
+    public float getY() {
+        return currentSprite.getY();
+    }
+
     public void setVelocity(float velocity) {
         this.velocity = velocity;
     }
