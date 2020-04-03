@@ -8,10 +8,7 @@ import com.mygdx.game.entity.Obstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
 
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 import static com.badlogic.gdx.Input.Keys;
 import static com.mygdx.game.Config.OBSTACLE_CREATION_INTERVAL;

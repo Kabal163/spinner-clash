@@ -21,14 +21,19 @@ public class Obstacle implements GameObject {
 
     private float velocity;
     private final Sprite currentSprite;
-    private final TextureRegion texture;
+    private static TextureRegion texture;
     private boolean passed;
+    private int score;
 
     public Obstacle() {
+        if (texture == null) {
+            texture = new TextureRegion(new Texture(OBSTACLE_1));
+        }
         this.passed = false;
         this.velocity = -500;
-        this.texture = new TextureRegion(new Texture(OBSTACLE_1));
+
         this.currentSprite = new Sprite(texture);
+        score = 1;
         setSize();
         setPosition();
     }
@@ -85,6 +90,10 @@ public class Obstacle implements GameObject {
 
     public void setPassed(boolean passed) {
         this.passed = passed;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     private void setPosition() {

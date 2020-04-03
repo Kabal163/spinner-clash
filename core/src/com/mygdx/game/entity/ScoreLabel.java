@@ -50,19 +50,10 @@ public class ScoreLabel implements GameObject {
                 .filter(o -> !o.isPassed())
                 .forEach(o -> {
                     if (o.getX() < gameScreen.getPlayer().getX()) {
-                        score++;
+                        score = score + o.getScore();
                         o.setPassed(true);
                     }
                 });
-
-        if (!obstacles.isEmpty()) {
-            Obstacle last = obstacles.getLast();
-            if (last.getX() < gameScreen.getPlayer().getX() &&
-                    last != lastPassedObstacle) {
-                lastPassedObstacle = last;
-                score++;
-            }
-        }
 
         char[] chars = String
                 .valueOf(score)
