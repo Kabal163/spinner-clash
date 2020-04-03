@@ -1,16 +1,21 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.mygdx.game.entity.Background;
+import com.mygdx.game.entity.GameObject;
+import com.mygdx.game.entity.TitleLabel;
 
 import static com.badlogic.gdx.Input.Keys;
 import static com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import static com.mygdx.game.Assets.TITLE;
 
 public class MenuScreen extends AbstractScreen {
+
+    private GameObject background;
+    private GameObject spinnerClashTitle;
+    private Label instructions;
 
     public MenuScreen(SpinnerGame game) {
         super(game);
@@ -18,30 +23,29 @@ public class MenuScreen extends AbstractScreen {
 
     @Override
     public void create() {
-        uiStage.addActor(createBackground());
-        uiStage.addActor(createTitle());
-        uiStage.addActor(createInstructions());
+        background = new Background();
+        spinnerClashTitle = new TitleLabel();
+        instructions = createInstructions();
     }
 
     @Override
     public void update(float delta) {
-
+        instructions.act(delta);
     }
 
     @Override
     public void renderScene(float delta) {
+        game.batch.begin();
 
+        background.draw(game.batch);
+        spinnerClashTitle.draw(game.batch);
+        instructions.draw(game.batch, delta);
+
+        game.batch.end();
     }
 
-    private Actor createTitle() {
-        Texture texture = new Texture(TITLE);
-        Actor title = new BaseActor(texture);
-        title.setPosition(20, 250);
 
-        return title;
-    }
-
-    private Actor createInstructions() {
+    private Label createInstructions() {
         BitmapFont font = new BitmapFont();
         String text = " Press S to start ";
         LabelStyle style = new LabelStyle(font, Color.WHITE);

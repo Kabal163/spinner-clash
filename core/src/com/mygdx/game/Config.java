@@ -7,6 +7,9 @@ public final class Config {
     public static final float VIEW_WIDTH = 640;
     public static final float VIEW_HEIGHT = 480;
 
+    public static final float BACKGROUND_X_POS = 0;
+    public static final float BACKGROUND_Y_POS = 0;
+
     public static final float PLAYER_ROTATION_DEGREE = -60;
     public static final float PLAYER_INIT_X_POS = 50;
     public static final float PLAYER_INIT_Y_POS = 200;
@@ -27,4 +30,7 @@ public final class Config {
     public static final float SCORE_FRAME_DURATION = 1f;
     public static final int NUMBER_WIDTH = 81;
     public static final int NUMBER_HEIGHT = 78;
+
+    public static float SPINNER_CLASH_TITLE_X_POS = 20;
+    public static float SPINNER_CLASH_TITLE_Y_POS = 250;
 }

@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -10,8 +8,6 @@ buildscript {
         google()
     }
     dependencies {
-        
-
     }
 }
 
@@ -58,6 +54,14 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        
+
+        [
+                'org.projectlombok:lombok:1.18.12'
+        ].each {
+            compileOnly it
+            testCompileOnly it
+            annotationProcessor it
+            testAnnotationProcessor it
+        }
     }
 }

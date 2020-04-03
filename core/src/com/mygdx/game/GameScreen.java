@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.entity.Background;
 import com.mygdx.game.entity.Explosion;
 import com.mygdx.game.entity.FastObstacle;
 import com.mygdx.game.entity.GameOverLabel;
@@ -10,14 +11,16 @@ import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
 import com.mygdx.game.entity.SimpleObstacle;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import static com.badlogic.gdx.Input.Keys;
 import static com.mygdx.game.Config.OBSTACLE_CREATION_INTERVAL;
+import static com.mygdx.game.Config.OBSTACLE_WIDTH;
 
 public class GameScreen extends AbstractScreen {
 
-    private Actor background;
+    private Background background;
     private Player player;
     private Explosion explosion;
     private LinkedList<Obstacle> obstacles;
@@ -41,9 +44,8 @@ public class GameScreen extends AbstractScreen {
         lastAccelerationTimeElapsed = 0;
         accelerationCount = 0;
         fastObstacleCreationTimeElapsed = 0;
-        background = createBackground();
-        mainStage.addActor(background);
 
+        background = new Background();
         player = new Player();
         obstacles = new LinkedList<>();
 
@@ -79,6 +81,9 @@ public class GameScreen extends AbstractScreen {
         if (obstacleCreationTimeElapsed > OBSTACLE_CREATION_INTERVAL) {
             createObstacle();
         }
+
+        obstacles.removeIf(obstacle -> obstacle.getX() < -OBSTACLE_WIDTH);
+
         player.update(delta);
         for (Obstacle obstacle : obstacles) {
             obstacle.update(delta);
@@ -89,6 +94,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void renderScene(float delta) {
         game.batch.begin();
+        background.draw(game.batch);
         scoreLabel.draw(game.batch);
 
         if (failure) {

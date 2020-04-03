@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.GameObject;
 import com.mygdx.game.GameScreen;
-import com.mygdx.game.ObjectTag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +15,7 @@ import static com.mygdx.game.Assets.NUMBERS;
 import static com.mygdx.game.Config.NUMBER_HEIGHT;
 import static com.mygdx.game.Config.NUMBER_WIDTH;
 import static com.mygdx.game.Config.VIEW_WIDTH;
+import static com.mygdx.game.entity.ObjectTag.LABEL;
 
 /**
  * Not thread safe
@@ -89,6 +88,6 @@ public class ScoreLabel implements GameObject {
 
     @Override
     public ObjectTag getTag() {
-        return null;
+        return LABEL;
     }
 }

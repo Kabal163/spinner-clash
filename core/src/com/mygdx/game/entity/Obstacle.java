@@ -4,15 +4,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.GameObject;
-import com.mygdx.game.ObjectTag;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.mygdx.game.Config.OBSTACLE_HEIGHT;
 import static com.mygdx.game.Config.OBSTACLE_WIDTH;
 import static com.mygdx.game.Config.VIEW_HEIGHT;
 import static com.mygdx.game.Config.VIEW_WIDTH;
-import static com.mygdx.game.ObjectTag.OBSTACLE;
+import static com.mygdx.game.entity.ObjectTag.OBSTACLE;
 
 public abstract class Obstacle implements GameObject {
 

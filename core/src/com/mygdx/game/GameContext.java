@@ -6,9 +6,11 @@ import com.mygdx.game.entity.GameOverLabel;
 import com.mygdx.game.entity.Obstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
+import lombok.Data;
 
 import java.util.LinkedList;
 
+@Data
 public class GameContext {
 
     public Actor background;
@@ -17,12 +19,4 @@ public class GameContext {
     public LinkedList<Obstacle> obstacles;
     public ScoreLabel scoreLabel;
     public GameOverLabel gameOverLabel;
-
-    public static GameContext getInstance() {
-        return ContextHolder.INSTANCE;
-    }
-
-    public static final class ContextHolder {
-        private static GameContext INSTANCE = new GameContext();
-    }
 }

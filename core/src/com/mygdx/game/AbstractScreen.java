@@ -5,12 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import static com.badlogic.gdx.graphics.Texture.TextureWrap.Repeat;
-import static com.mygdx.game.Assets.BACKGROUND_NIGHT_CITY;
 
 public abstract class AbstractScreen implements Screen, InputProcessor {
 
@@ -48,42 +43,16 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
     public void render(float delta) {
         update(delta);
 
-        uiStage.act(delta);
-        mainStage.act(delta);
-
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mainStage.draw();
-        uiStage.draw();
         renderScene(delta);
-    }
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(boolean b) {
-        paused = b;
-    }
-
-    public void togglePaused() {
-        paused = !paused;
     }
 
     @Override
     public void resize(int width, int height) {
         mainStage.getViewport().update(width, height, true);
         uiStage.getViewport().update(width, height, true);
-    }
-
-    protected Actor createBackground() {
-        Texture texture = new Texture(BACKGROUND_NIGHT_CITY);
-        texture.setWrap(Repeat, Repeat);
-        Actor background = new RepeatableActor(texture);
-        background.setPosition(0, 0);
-
-        return background;
     }
 
     @Override

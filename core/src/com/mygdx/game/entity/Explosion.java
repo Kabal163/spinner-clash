@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.GameObject;
-import com.mygdx.game.ObjectTag;
 
 import java.util.ArrayList;
 import java.util.Arrays;

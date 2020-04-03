@@ -6,21 +6,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import static com.mygdx.game.Assets.GAME_OVER;
+import static com.mygdx.game.Assets.SPINNER_CLASH_TITLE;
+import static com.mygdx.game.Config.SPINNER_CLASH_TITLE_X_POS;
+import static com.mygdx.game.Config.SPINNER_CLASH_TITLE_Y_POS;
+import static com.mygdx.game.entity.ObjectTag.LABEL;
 
-public class GameOverLabel implements GameObject {
+public class TitleLabel implements GameObject {
 
     private static TextureRegion texture;
 
-    private final Sprite sprite;
+    private Sprite sprite;
 
-    public GameOverLabel() {
+    public TitleLabel() {
         if (texture == null) {
-            texture = new TextureRegion(new Texture(GAME_OVER));
+            texture = new TextureRegion(new Texture(SPINNER_CLASH_TITLE));
         }
 
         sprite = new Sprite(texture);
-        sprite.setPosition(100, 240);
+        sprite.setPosition(SPINNER_CLASH_TITLE_X_POS, SPINNER_CLASH_TITLE_Y_POS);
     }
 
     @Override
@@ -45,6 +48,6 @@ public class GameOverLabel implements GameObject {
 
     @Override
     public ObjectTag getTag() {
-        return null;
+        return LABEL;
     }
 }
