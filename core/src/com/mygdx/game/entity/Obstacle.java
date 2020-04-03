@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.GameObject;
 import com.mygdx.game.ObjectTag;
 
+import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.mygdx.game.Assets.OBSTACLE_1;
 import static com.mygdx.game.Config.OBSTACLE_HEIGHT;
 import static com.mygdx.game.Config.OBSTACLE_WIDTH;
@@ -21,8 +22,10 @@ public class Obstacle implements GameObject {
     private float velocity;
     private final Sprite currentSprite;
     private final TextureRegion texture;
+    private boolean passed;
 
     public Obstacle() {
+        this.passed = false;
         this.velocity = -500;
         this.texture = new TextureRegion(new Texture(OBSTACLE_1));
         this.currentSprite = new Sprite(texture);
@@ -32,7 +35,7 @@ public class Obstacle implements GameObject {
 
     @Override
     public void update(float delta) {
-        currentSprite.setX(currentSprite.getX() + velocity * delta);
+        currentSprite.setX(currentSprite.getX() + velocity * clamp(delta, delta, 1/30f));
     }
 
     @Override
@@ -66,6 +69,22 @@ public class Obstacle implements GameObject {
 
     public void increaseVelocity(float velocity) {
         this.velocity += velocity;
+    }
+
+    public float getX() {
+        return currentSprite.getX();
+    }
+
+    public float getY() {
+        return currentSprite.getY();
+    }
+
+    public boolean isPassed() {
+        return passed;
+    }
+
+    public void setPassed(boolean passed) {
+        this.passed = passed;
     }
 
     private void setPosition() {

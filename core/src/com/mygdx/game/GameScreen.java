@@ -1,18 +1,19 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.entity.Explosion;
+import com.mygdx.game.entity.GameOverLabel;
 import com.mygdx.game.entity.Obstacle;
 import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.ScoreLabel;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import static com.badlogic.gdx.Input.Keys;
-import static com.badlogic.gdx.graphics.Color.NAVY;
 import static com.mygdx.game.Config.OBSTACLE_CREATION_INTERVAL;
 
 public class GameScreen extends AbstractScreen {
@@ -20,16 +21,18 @@ public class GameScreen extends AbstractScreen {
     private Actor background;
     private Player player;
     private Explosion explosion;
-    private Set<Obstacle> obstacles;
-    private Label timeLabel;
-    private Label gameOverLabel;
+    private LinkedList<Obstacle> obstacles;
+    private ScoreLabel scoreLabel;
+    private GameOverLabel gameOverLabel;
 
-    private float timeElapsed;
     private float obstacleCreationTimeElapsed;
     private float lastAccelerationTimeElapsed;
     private float accelerationCount;
     private boolean failure;
     private boolean pause;
+
+    private float timeElapse;
+    private int fps;
 
     public GameScreen(SpinnerGame game) {
         super(game);
@@ -37,7 +40,8 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void create() {
-        timeElapsed = 0;
+        timeElapse = 0;
+        fps = 0;
         obstacleCreationTimeElapsed = 0;
         lastAccelerationTimeElapsed = 0;
         accelerationCount = 0;
@@ -45,13 +49,10 @@ public class GameScreen extends AbstractScreen {
         mainStage.addActor(background);
 
         player = new Player();
-        obstacles = new HashSet<>();
+        obstacles = new LinkedList<>();
 
-        timeLabel = createTimeLabel();
-        uiStage.addActor(timeLabel);
-
-        gameOverLabel = createGameOverLabel();
-        uiStage.addActor(gameOverLabel);
+        scoreLabel = new ScoreLabel(this);
+        gameOverLabel = new GameOverLabel();
     }
 
     @Override
@@ -67,7 +68,6 @@ public class GameScreen extends AbstractScreen {
         }
 
         if (failure) {
-            gameOverLabel.setVisible(true);
             if (explosion == null) {
                 explosion = new Explosion(player.getX(), player.getY());
             }
@@ -76,10 +76,9 @@ public class GameScreen extends AbstractScreen {
             return;
         }
 
-        timeElapsed += delta;
         obstacleCreationTimeElapsed += delta;
         lastAccelerationTimeElapsed += delta;
-        timeLabel.setText("Time: " + (int)timeElapsed);
+        timeElapse += delta;
 
         if (obstacleCreationTimeElapsed > OBSTACLE_CREATION_INTERVAL) {
             obstacleCreationTimeElapsed = 0;
@@ -96,46 +95,30 @@ public class GameScreen extends AbstractScreen {
         for (Obstacle obstacle : obstacles) {
             obstacle.update(delta);
         }
+        scoreLabel.update(delta);
     }
 
     @Override
     public void renderScene(float delta) {
         game.batch.begin();
+        scoreLabel.draw(game.batch);
 
-        if (!failure) {
-            player.draw(game.batch);
-        } else if (!explosion.isEnded()) {
-            explosion.draw(game.batch);
+        if (failure) {
+            if (!explosion.isEnded()) {
+                explosion.draw(game.batch);
+            }
+            gameOverLabel.draw(game.batch);
+            game.batch.end();
+            return;
         }
+
+        player.draw(game.batch);
 
         for (Obstacle obstacle : obstacles) {
             obstacle.draw(game.batch);
         }
+
         game.batch.end();
-    }
-
-    private Label createTimeLabel() {
-        BitmapFont font = new BitmapFont();
-        String text = "Time: 0";
-        Label.LabelStyle style = new Label.LabelStyle(font, NAVY);
-        Label timeLabel = new Label(text, style);
-        timeLabel.setFontScale(2);
-        timeLabel.setPosition(500, 440);
-
-        return timeLabel;
-    }
-
-    private Label createGameOverLabel() {
-        BitmapFont font = new BitmapFont();
-        String text = "GAME OVER";
-        Label.LabelStyle style = new Label.LabelStyle(font, NAVY);
-        Label gameOverLabel = new Label(text, style);
-        gameOverLabel.setFontScale(4);
-        gameOverLabel.setPosition(100, 240);
-        gameOverLabel.setVisible(false);
-
-
-        return gameOverLabel;
     }
 
     @Override
@@ -182,5 +165,13 @@ public class GameScreen extends AbstractScreen {
 
     private void togglePause() {
         pause = !pause;
+    }
+
+    public LinkedList<Obstacle> getObstacles() {
+        return obstacles;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
