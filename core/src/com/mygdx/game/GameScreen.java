@@ -3,10 +3,12 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.entity.Explosion;
+import com.mygdx.game.entity.FastObstacle;
 import com.mygdx.game.entity.GameOverLabel;
 import com.mygdx.game.entity.Obstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
+import com.mygdx.game.entity.SimpleObstacle;
 
 import java.util.LinkedList;
 
@@ -25,11 +27,9 @@ public class GameScreen extends AbstractScreen {
     private float obstacleCreationTimeElapsed;
     private float lastAccelerationTimeElapsed;
     private float accelerationCount;
+    private float fastObstacleCreationTimeElapsed;
     private boolean failure;
     private boolean pause;
-
-    private float timeElapse;
-    private int fps;
 
     public GameScreen(SpinnerGame game) {
         super(game);
@@ -37,11 +37,10 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void create() {
-        timeElapse = 0;
-        fps = 0;
         obstacleCreationTimeElapsed = 0;
         lastAccelerationTimeElapsed = 0;
         accelerationCount = 0;
+        fastObstacleCreationTimeElapsed = 0;
         background = createBackground();
         mainStage.addActor(background);
 
@@ -75,18 +74,10 @@ public class GameScreen extends AbstractScreen {
 
         obstacleCreationTimeElapsed += delta;
         lastAccelerationTimeElapsed += delta;
-        timeElapse += delta;
+        fastObstacleCreationTimeElapsed += delta;
 
         if (obstacleCreationTimeElapsed > OBSTACLE_CREATION_INTERVAL) {
-            obstacleCreationTimeElapsed = 0;
-            Obstacle obstacle = new Obstacle();
-
-            if (lastAccelerationTimeElapsed > 5) {
-                lastAccelerationTimeElapsed = 0;
-                accelerationCount++;
-            }
-            obstacle.increaseVelocity(-10 * accelerationCount);
-            obstacles.add(obstacle);
+            createObstacle();
         }
         player.update(delta);
         for (Obstacle obstacle : obstacles) {
@@ -159,6 +150,25 @@ public class GameScreen extends AbstractScreen {
 
         return false;
     }
+
+    private void createObstacle() {
+        obstacleCreationTimeElapsed = 0;
+        Obstacle obstacle;
+        if ((int) fastObstacleCreationTimeElapsed > 7) {
+            obstacle = new FastObstacle();
+            fastObstacleCreationTimeElapsed = 0;
+        } else {
+            obstacle = new SimpleObstacle();
+        }
+
+        if (lastAccelerationTimeElapsed > 5) {
+            lastAccelerationTimeElapsed = 0;
+            accelerationCount++;
+        }
+        obstacle.increaseVelocity(-10 * accelerationCount);
+        obstacles.add(obstacle);
+    }
+
 
     private void togglePause() {
         pause = !pause;

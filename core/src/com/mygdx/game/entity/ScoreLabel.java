@@ -11,7 +11,6 @@ import com.mygdx.game.ObjectTag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.mygdx.game.Assets.NUMBERS;
@@ -30,8 +29,6 @@ public class ScoreLabel implements GameObject {
     private int score;
     private List<Sprite> toBeDrawn;
 
-    private Obstacle lastPassedObstacle;
-
     public ScoreLabel(GameScreen screen) {
         this.gameScreen = screen;
         score = 0;
@@ -44,9 +41,8 @@ public class ScoreLabel implements GameObject {
     @Override
     public void update(float delta) {
         toBeDrawn = new ArrayList<>();
-        LinkedList<Obstacle> obstacles = gameScreen.getObstacles();
 
-        obstacles.stream()
+        gameScreen.getObstacles().stream()
                 .filter(o -> !o.isPassed())
                 .forEach(o -> {
                     if (o.getX() < gameScreen.getPlayer().getX()) {
