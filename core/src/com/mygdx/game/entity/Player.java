@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.GameUtil;
+import com.mygdx.game.entity.item.PickUpItem;
+import com.mygdx.game.entity.item.weapon.DummyWeapon;
 
 import static com.mygdx.game.Assets.SPINNER;
 import static com.mygdx.game.Config.PLAYER_HEIGHT;
@@ -15,16 +19,27 @@ import static com.mygdx.game.Config.PLAYER_WIDTH;
 import static com.mygdx.game.Config.VIEW_HEIGHT;
 import static com.mygdx.game.entity.ObjectTag.PLAYER;
 
+/**
+ * Not thread safe
+ */
 public class Player implements GameObject {
 
+    private final GameScreen gameScreen;
     private float velocity;
     private final Sprite sprite;
-    private final TextureRegion texture;
+    private static TextureRegion texture;
+    private PickUpItem item;
+    private boolean useItem;
 
-    public Player() {
+    public Player(GameScreen gameScreen) {
+        if (texture == null) {
+            texture = new TextureRegion(new Texture(SPINNER));
+        }
+
+        this.gameScreen = gameScreen;
         this.velocity = 0;
-        this.texture = new TextureRegion(new Texture(SPINNER));
         this.sprite = new Sprite(texture);
+        this.item = new DummyWeapon(gameScreen);
         setSize();
         setOrigin();
         setPosition();
@@ -42,6 +57,12 @@ public class Player implements GameObject {
         if (sprite.getY() >= VIEW_HEIGHT - sprite.getHeight()) {
             sprite.setY(VIEW_HEIGHT - sprite.getHeight());
         }
+
+        item.update(delta);
+
+        if (item.isOver()) {
+            item = new DummyWeapon(gameScreen);
+        }
     }
 
     @Override
@@ -51,7 +72,7 @@ public class Player implements GameObject {
 
     @Override
     public boolean isCollided(GameObject anotherObject) {
-        return sprite.getBoundingRectangle().overlaps(anotherObject.getCollider());
+        return GameUtil.isCollided(this, anotherObject);
     }
 
     @Override
@@ -76,8 +97,25 @@ public class Player implements GameObject {
         this.velocity = velocity;
     }
 
-    public void increaseVelocity(float velocity) {
-        this.velocity += velocity;
+    public void setItem(PickUpItem item) {
+        this.item = item;
+        item.pickUp();
+    }
+
+    public PickUpItem getItem() {
+        return item;
+    }
+
+    public void useItem() {
+        this.useItem = true;
+    }
+
+    public boolean isItemUsed() {
+        return this.useItem;
+    }
+
+    public void markAsUsed() {
+        useItem = false;
     }
 
     private void setPosition() {

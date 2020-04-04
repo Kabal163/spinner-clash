@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.GameUtil;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.mygdx.game.Config.OBSTACLE_HEIGHT;
@@ -14,12 +16,15 @@ import static com.mygdx.game.entity.ObjectTag.OBSTACLE;
 
 public abstract class Obstacle implements GameObject {
 
+    protected final GameScreen gameScreen;
     protected float velocity;
     protected Sprite sprite;
     protected boolean passed;
     protected int score;
+    private boolean exploded;
 
-    public Obstacle() {
+    public Obstacle(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
         this.passed = false;
     }
 
@@ -35,12 +40,7 @@ public abstract class Obstacle implements GameObject {
 
     @Override
     public boolean isCollided(GameObject anotherObject) {
-        Rectangle collider = anotherObject.getCollider();
-
-        return sprite.getX() < collider.getX() + collider.width / 2 &&
-                sprite.getX() + sprite.getWidth() / 2 > collider.x &&
-                sprite.getY() < collider.y + collider.height / 2 &&
-                sprite.getY() + sprite.getHeight() / 2 > collider.y;
+        return GameUtil.isCollided(this, anotherObject);
     }
 
     @Override
@@ -69,12 +69,20 @@ public abstract class Obstacle implements GameObject {
         return passed;
     }
 
-    public void setPassed(boolean passed) {
-        this.passed = passed;
+    public void setPassed(boolean b) {
+        this.passed = b;
     }
 
     public int getScore() {
         return score;
+    }
+
+    public void explode() {
+        exploded = true;
+    }
+
+    public boolean isExploded() {
+        return exploded;
     }
 
     protected void setPosition() {

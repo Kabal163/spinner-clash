@@ -5,23 +5,13 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public abstract class AbstractScreen implements Screen, InputProcessor {
 
     protected final SpinnerGame game;
 
-    protected Stage mainStage;
-    protected Stage uiStage;
-
-    private boolean paused;
-
     public AbstractScreen(SpinnerGame game) {
         this.game = game;
-
-        mainStage = new Stage();
-        uiStage = new Stage();
-        paused = false;
 
         InputMultiplexer im = new InputMultiplexer(this);
         Gdx.input.setInputProcessor(im);
@@ -51,8 +41,7 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        mainStage.getViewport().update(width, height, true);
-        uiStage.getViewport().update(width, height, true);
+
     }
 
     @Override

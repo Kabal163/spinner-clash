@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.entity.Background;
 import com.mygdx.game.entity.Explosion;
 import com.mygdx.game.entity.FastObstacle;
@@ -10,24 +9,38 @@ import com.mygdx.game.entity.Obstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
 import com.mygdx.game.entity.SimpleObstacle;
+import com.mygdx.game.entity.item.PickUpItem;
+import com.mygdx.game.entity.item.weapon.Bullet;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.badlogic.gdx.Input.Keys;
+import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.mygdx.game.Config.OBSTACLE_CREATION_INTERVAL;
 import static com.mygdx.game.Config.OBSTACLE_WIDTH;
+import static com.mygdx.game.Config.WEAPON_CREATION_TIME_INTERVAL;
 
+@Setter
+@Getter
 public class GameScreen extends AbstractScreen {
+
+    private EntityCreationManager creationManager;
 
     private Background background;
     private Player player;
     private Explosion explosion;
-    private LinkedList<Obstacle> obstacles;
+    private List<Obstacle> obstacles;
+    private List<PickUpItem> items;
+    private List<Bullet> bullets;
     private ScoreLabel scoreLabel;
     private GameOverLabel gameOverLabel;
+    private OverlapManager overlapManager;
 
     private float obstacleCreationTimeElapsed;
+    private float weaponCreationTimeElapsed;
     private float lastAccelerationTimeElapsed;
     private float accelerationCount;
     private float fastObstacleCreationTimeElapsed;
@@ -36,18 +49,26 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(SpinnerGame game) {
         super(game);
+
     }
 
     @Override
     public void create() {
         obstacleCreationTimeElapsed = 0;
+        weaponCreationTimeElapsed = 0;
         lastAccelerationTimeElapsed = 0;
         accelerationCount = 0;
         fastObstacleCreationTimeElapsed = 0;
 
-        background = new Background();
-        player = new Player();
-        obstacles = new LinkedList<>();
+        creationManager = new GameScreenEntityCreationManager(this);
+
+        creationManager.createBackground();
+        creationManager.createPlayer();
+
+        obstacles = new ArrayList<>();
+        items = new ArrayList<>();
+        bullets = new ArrayList<>();
+        overlapManager = new OverlapManagerImpl(this);
 
         scoreLabel = new ScoreLabel(this);
         gameOverLabel = new GameOverLabel();
@@ -55,40 +76,56 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void update(float delta) {
+        float localDelta = clamp(delta, delta, 1/30f);
         if (pause) {
             return;
         }
-
-        for (Obstacle obstacle : obstacles) {
-            if (obstacle.isCollided(player)) {
-                failure = true;
-            }
-        }
+        overlapManager.update(localDelta);
 
         if (failure) {
             if (explosion == null) {
                 explosion = new Explosion(player.getX(), player.getY());
             }
-            explosion.update(delta);
+            explosion.update(localDelta);
 
             return;
         }
 
-        obstacleCreationTimeElapsed += delta;
-        lastAccelerationTimeElapsed += delta;
-        fastObstacleCreationTimeElapsed += delta;
+        obstacleCreationTimeElapsed += localDelta;
+        weaponCreationTimeElapsed += localDelta;
+        lastAccelerationTimeElapsed += localDelta;
+        fastObstacleCreationTimeElapsed += localDelta;
 
         if (obstacleCreationTimeElapsed > OBSTACLE_CREATION_INTERVAL) {
-            createObstacle();
+            creationManager.createObstacle();
         }
 
-        obstacles.removeIf(obstacle -> obstacle.getX() < -OBSTACLE_WIDTH);
+        if (weaponCreationTimeElapsed > WEAPON_CREATION_TIME_INTERVAL) {
+            weaponCreationTimeElapsed = 0;
+            creationManager.createLaser();
+        }
 
-        player.update(delta);
+        obstacles.removeIf(obstacle -> obstacle.getX() < -OBSTACLE_WIDTH || obstacle.isExploded());
+        bullets.removeIf(Bullet::isHit);
+
+        player.update(localDelta);
         for (Obstacle obstacle : obstacles) {
-            obstacle.update(delta);
+            obstacle.update(localDelta);
         }
-        scoreLabel.update(delta);
+
+        for (PickUpItem item : items) {
+            item.update(localDelta);
+        }
+
+        for (Bullet bullet : bullets) {
+            bullet.update(localDelta);
+        }
+
+        scoreLabel.update(localDelta);
+    }
+
+    public void setFailure(boolean b) {
+        this.failure = b;
     }
 
     @Override
@@ -112,6 +149,14 @@ public class GameScreen extends AbstractScreen {
             obstacle.draw(game.batch);
         }
 
+        for (PickUpItem item : items) {
+            item.draw(game.batch);
+        }
+
+        for (Bullet bullet : bullets) {
+            bullet.draw(game.batch);
+        }
+
         game.batch.end();
     }
 
@@ -131,6 +176,10 @@ public class GameScreen extends AbstractScreen {
 
         if (keycode == Keys.UP) {
             player.setVelocity(250 + accelerationCount * 5);
+        }
+
+        if (keycode == Keys.F) {
+            player.useItem();
         }
 
         return false;
@@ -157,34 +206,7 @@ public class GameScreen extends AbstractScreen {
         return false;
     }
 
-    private void createObstacle() {
-        obstacleCreationTimeElapsed = 0;
-        Obstacle obstacle;
-        if ((int) fastObstacleCreationTimeElapsed > 7) {
-            obstacle = new FastObstacle();
-            fastObstacleCreationTimeElapsed = 0;
-        } else {
-            obstacle = new SimpleObstacle();
-        }
-
-        if (lastAccelerationTimeElapsed > 5) {
-            lastAccelerationTimeElapsed = 0;
-            accelerationCount++;
-        }
-        obstacle.increaseVelocity(-10 * accelerationCount);
-        obstacles.add(obstacle);
-    }
-
-
     private void togglePause() {
         pause = !pause;
-    }
-
-    public LinkedList<Obstacle> getObstacles() {
-        return obstacles;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 }

@@ -20,6 +20,7 @@ public final class Config {
     public static final float OBSTACLE_WIDTH = 130;
 
     public static final float OBSTACLE_CREATION_INTERVAL = 1;
+    public static final float WEAPON_CREATION_TIME_INTERVAL = 2;
 
     public static final float DEFAULT_FRAME_LENGTH = 0.2f;
 
@@ -27,10 +28,14 @@ public final class Config {
     public static final int EXPLOSION_HEIGHT = 130;
     public static final int EXPLOSION_WIDTH = 130;
 
-    public static final float SCORE_FRAME_DURATION = 1f;
     public static final int NUMBER_WIDTH = 81;
     public static final int NUMBER_HEIGHT = 78;
 
     public static float SPINNER_CLASH_TITLE_X_POS = 20;
     public static float SPINNER_CLASH_TITLE_Y_POS = 250;
+
+    public static float DEFAULT_LABEL_TRANSPARENCY = 1;
+
+    public static float LASER_LIFE_LENGTH = 10; // seconds
+    public static float DEFAULT_BULLET_VELOCITY = 400;
 }

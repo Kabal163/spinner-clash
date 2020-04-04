@@ -12,4 +12,6 @@ public final class Assets {
     public static final String EXPLOSION = "explosion.png";
     public static final String NUMBERS = "numbers.png";
     public static final String GAME_OVER = "game-over.png";
+    public static final String BULLET = "bullet.png";
+    public static final String LASER = "laser.png";
 }

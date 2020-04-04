@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.entity.Background;
 import com.mygdx.game.entity.GameObject;
@@ -10,12 +9,14 @@ import com.mygdx.game.entity.TitleLabel;
 
 import static com.badlogic.gdx.Input.Keys;
 import static com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import static com.mygdx.game.Config.DEFAULT_LABEL_TRANSPARENCY;
 
 public class MenuScreen extends AbstractScreen {
 
     private GameObject background;
     private GameObject spinnerClashTitle;
     private Label instructions;
+
 
     public MenuScreen(SpinnerGame game) {
         super(game);
@@ -39,7 +40,7 @@ public class MenuScreen extends AbstractScreen {
 
         background.draw(game.batch);
         spinnerClashTitle.draw(game.batch);
-        instructions.draw(game.batch, delta);
+        instructions.draw(game.batch, DEFAULT_LABEL_TRANSPARENCY);
 
         game.batch.end();
     }
