@@ -29,6 +29,9 @@ public abstract class Obstacle implements GameObject {
     }
 
     @Override
+    public void create() {}
+
+    @Override
     public void update(float delta) {
         sprite.setX(sprite.getX() + velocity * clamp(delta, delta, 1/30f));
     }
@@ -83,6 +86,11 @@ public abstract class Obstacle implements GameObject {
 
     public boolean isExploded() {
         return exploded;
+    }
+
+    @Override
+    public boolean isOutOfGame() {
+        return getX() < -OBSTACLE_WIDTH;
     }
 
     protected void setPosition() {

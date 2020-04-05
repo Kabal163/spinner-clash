@@ -27,9 +27,4 @@ public class FastObstacle extends Obstacle {
         setSize();
         setPosition();
     }
-
-    @Override
-    public void create() {
-
-    }
 }

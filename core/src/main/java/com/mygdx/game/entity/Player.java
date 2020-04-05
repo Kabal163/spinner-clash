@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.GameUtil;
+import com.mygdx.game.SpinnerGame;
 import com.mygdx.game.entity.item.PickUpItem;
 import com.mygdx.game.entity.item.weapon.DummyWeapon;
 
@@ -24,22 +25,22 @@ import static com.mygdx.game.entity.ObjectTag.PLAYER;
  */
 public class Player implements GameObject {
 
-    private final GameScreen gameScreen;
+    private final SpinnerGame gameContext;
     private float velocity;
     private final Sprite sprite;
     private static TextureRegion texture;
     private PickUpItem item;
     private boolean useItem;
 
-    public Player(GameScreen gameScreen) {
+    public Player(SpinnerGame gameContext) {
         if (texture == null) {
             texture = new TextureRegion(new Texture(SPINNER));
         }
 
-        this.gameScreen = gameScreen;
+        this.gameContext = gameContext;
         this.velocity = 0;
         this.sprite = new Sprite(texture);
-        this.item = new DummyWeapon(gameScreen);
+        this.item = new DummyWeapon(gameContext);
         setSize();
         setOrigin();
         setPosition();
@@ -63,10 +64,8 @@ public class Player implements GameObject {
             sprite.setY(VIEW_HEIGHT - sprite.getHeight());
         }
 
-        item.update(delta);
-
-        if (item.isOver()) {
-            item = new DummyWeapon(gameScreen);
+        if (item.isExpired()) {
+            item = new DummyWeapon(gameContext);
         }
     }
 
@@ -88,6 +87,11 @@ public class Player implements GameObject {
     @Override
     public ObjectTag getTag() {
         return PLAYER;
+    }
+
+    @Override
+    public boolean isOutOfGame() {
+        return false;
     }
 
     public float getX() {
@@ -112,15 +116,7 @@ public class Player implements GameObject {
     }
 
     public void useItem() {
-        this.useItem = true;
-    }
-
-    public boolean isItemUsed() {
-        return this.useItem;
-    }
-
-    public void markAsUsed() {
-        useItem = false;
+        item.use();
     }
 
     private void setPosition() {

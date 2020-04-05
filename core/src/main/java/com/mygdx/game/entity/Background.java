@@ -68,4 +68,9 @@ public class Background implements GameObject {
     public ObjectTag getTag() {
         return BACKGROUND;
     }
+
+    @Override
+    public boolean isOutOfGame() {
+        return false;
+    }
 }

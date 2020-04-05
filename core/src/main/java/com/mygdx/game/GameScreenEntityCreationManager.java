@@ -28,7 +28,7 @@ public class GameScreenEntityCreationManager implements EntityCreationManager {
 
     @Override
     public Player createPlayer() {
-        Player player = new Player(gameScreen);
+        Player player = new Player(gameScreen.game);
         gameScreen.setPlayer(player);
 
         return player;
@@ -57,8 +57,8 @@ public class GameScreenEntityCreationManager implements EntityCreationManager {
 
     @Override
     public PickUpItem createLaser() {
-        Laser laser = new Laser(gameScreen);
-        gameScreen.getItems().add(laser);
+        Laser laser = new Laser(gameScreen.game);
+        laser.create();
 
         return laser;
     }

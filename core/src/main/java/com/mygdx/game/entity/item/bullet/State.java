@@ -1,9 +1,9 @@
 package com.mygdx.game.entity.item.bullet;
 
-public enum BulletState {
+public enum State {
 
     INIT,
     MOVING,
-    OUT_OF_SCREEN,
+    OUT_OF_GAME,
     LANDED
 }

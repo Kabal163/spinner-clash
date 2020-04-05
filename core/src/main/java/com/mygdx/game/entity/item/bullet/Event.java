@@ -1,6 +1,6 @@
 package com.mygdx.game.entity.item.bullet;
 
-public enum BulletEvent {
+public enum Event {
 
     CREATE,
     UPDATE,

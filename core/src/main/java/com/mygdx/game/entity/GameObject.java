@@ -16,4 +16,6 @@ public interface GameObject {
     Rectangle getCollider();
 
     ObjectTag getTag();
+
+    boolean isOutOfGame();
 }

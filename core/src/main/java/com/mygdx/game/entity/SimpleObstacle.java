@@ -27,9 +27,4 @@ public class SimpleObstacle extends Obstacle {
         setSize();
         setPosition();
     }
-
-    @Override
-    public void create() {
-
-    }
 }

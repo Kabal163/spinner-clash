@@ -7,68 +7,68 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.GameUtil;
+import com.mygdx.game.SpinnerGame;
 import com.mygdx.game.entity.GameObject;
 
 import static com.mygdx.game.Assets.LASER;
+import static com.mygdx.game.entity.item.weapon.State.NOT_PICKED_UP;
+import static com.mygdx.game.entity.item.weapon.State.PICKED_UP;
 
-public class DummyWeapon extends Weapon {
+/**
+ * This is simple dummy weapon, so we don't use lifecycle manager for that
+ */
+public class DummyWeapon extends AbstractWeapon {
 
-    private boolean pickedUp;
     private static TextureRegion texture;
-    private Sprite sprite;
 
-    public DummyWeapon(GameScreen screen) {
-        super(screen);
+    public DummyWeapon(SpinnerGame gameContext) {
+        super(gameContext);
 
         if (texture == null) {
             texture = new TextureRegion(new Texture(LASER));
         }
-
-        sprite = new Sprite(texture);
     }
 
     @Override
     public void create() {
-
+        sprite = new Sprite(texture);
+        sprite.setPosition(0, 0);
+        sprite.setSize(0, 0);
     }
 
     @Override
-    public void update(float delta) {
-        return;
-    }
+    public void update(float delta) {}
 
+    /**
+     * Dummy weapon is not drawn
+     */
     @Override
-    public void draw(SpriteBatch batch) {
-        return;
-    }
-
-    @Override
-    public boolean isCollided(GameObject anotherObject) {
-        return GameUtil.isCollided(this, anotherObject);
-    }
-
-    @Override
-    public Rectangle getCollider() {
-        return sprite.getBoundingRectangle();
-    }
+    public void draw(SpriteBatch batch) {}
 
     @Override
     public void pickUp() {
-        pickedUp = true;
+        state = PICKED_UP;
     }
 
-    @Override
-    public boolean isPickedUp() {
-        return pickedUp;
-    }
 
     @Override
-    public boolean isOver() {
+    public boolean isExpired() {
         return false;
     }
 
     @Override
     public void drop() {
-        pickedUp = false;
+        state = NOT_PICKED_UP;
     }
+
+    @Override
+    public TextureRegion getTexture() {
+        return texture;
+    }
+
+    /**
+     * Dummy weapon cannot fire
+     */
+    @Override
+    public void use() {}
 }

@@ -18,10 +18,8 @@ import java.util.List;
 import static com.badlogic.gdx.Input.Keys;
 import static com.badlogic.gdx.math.MathUtils.clamp;
 import static com.mygdx.game.Config.OBSTACLE_CREATION_INTERVAL;
-import static com.mygdx.game.Config.OBSTACLE_WIDTH;
 import static com.mygdx.game.Config.WEAPON_CREATION_TIME_INTERVAL;
-import static com.mygdx.game.entity.item.bullet.BulletState.LANDED;
-import static com.mygdx.game.entity.item.bullet.BulletState.OUT_OF_SCREEN;
+import static com.mygdx.game.entity.item.bullet.State.LANDED;
 
 @Setter
 @Getter
@@ -104,8 +102,9 @@ public class GameScreen extends AbstractScreen {
             creationManager.createLaser();
         }
 
-        obstacles.removeIf(obstacle -> obstacle.getX() < -OBSTACLE_WIDTH || obstacle.isExploded());
-        bullets.removeIf(b -> OUT_OF_SCREEN.equals(b.getState()) || LANDED.equals(b.getState()));
+        obstacles.removeIf(o -> o.isOutOfGame() || o.isExploded());
+        bullets.removeIf(b -> b.isOutOfGame() || LANDED.equals(b.getState()));
+        items.removeIf(i -> i.isOutOfGame() || i.isExpired());
 
         player.update(localDelta);
         for (Obstacle obstacle : obstacles) {

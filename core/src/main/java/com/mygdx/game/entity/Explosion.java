@@ -75,6 +75,11 @@ public class Explosion implements GameObject {
         return null;
     }
 
+    @Override
+    public boolean isOutOfGame() {
+        return false;
+    }
+
     public boolean isEnded() {
         return ended;
     }

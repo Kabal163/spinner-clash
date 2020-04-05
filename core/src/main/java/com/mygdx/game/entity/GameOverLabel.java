@@ -52,4 +52,9 @@ public class GameOverLabel implements GameObject {
     public ObjectTag getTag() {
         return null;
     }
+
+    @Override
+    public boolean isOutOfGame() {
+        return false;
+    }
 }
