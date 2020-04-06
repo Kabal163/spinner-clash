@@ -83,6 +83,7 @@ public class LifecycleManagerImpl<S extends Enum<S>, E extends Enum<E>> implemen
                     log.error("There is no matching transition for source state: {} and event: {}",
                             sourceState,
                             event);
+                    System.out.println(sourceState + ", " + event);
                     return new TransitionNotFoundException("There is no matching transition!");
                 });
     }

@@ -51,7 +51,7 @@ public class ScoreLabel implements GameObject {
                 .forEach(o -> {
                     if (o.getX() < gameScreen.getPlayer().getX()) {
                         score = score + o.getScore();
-                        o.setPassed(true);
+                        o.pass();
                     }
                 });
 

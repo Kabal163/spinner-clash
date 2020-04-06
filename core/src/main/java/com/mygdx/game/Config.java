@@ -20,11 +20,17 @@ public final class Config {
     public static final float OBSTACLE_WIDTH = 130;
 
     public static final float OBSTACLE_CREATION_INTERVAL = 1;
+    public static final float DEFAULT_OBSTACLE_VELOCITY = -300;
+    public static final float SIMPLE_OBSTACLE_VELOCITY = -500;
+    public static final float FAST_OBSTACLE_VELOCITY = -700;
+    public static final int FAST_OBSTACLE_SCORE = 3;
+    public static final int SIMPLE_OBSTACLE_SCORE = 1;
+
     public static final float WEAPON_CREATION_TIME_INTERVAL = 2;
     public static final float WEAPON_WIDTH = 150;
     public static final float WEAPON_HEIGHT = 150;
     public static final float WEAPON_VELOCITY = -500;
-    public static final float WEAPON_LIFE_LENGTH = 3; // seconds
+    public static final float WEAPON_LIFE_LENGTH = 6; // seconds
 
     public static final float DEFAULT_FRAME_LENGTH = 0.2f;
 

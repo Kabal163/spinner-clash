@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import com.mygdx.game.entity.Obstacle;
+import com.mygdx.game.entity.obstacle.AbstractObstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.item.PickUpItem;
 import com.mygdx.game.entity.item.bullet.Bullet;
@@ -26,9 +26,9 @@ public class OverlapManagerImpl implements OverlapManager {
 
     private void checkObstacleOverlapping() {
         Player player = gameScreen.getPlayer();
-        List<Obstacle> obstacles = gameScreen.getObstacles();
+        List<AbstractObstacle> obstacles = gameScreen.getObstacles();
 
-        for (Obstacle obstacle : obstacles) {
+        for (AbstractObstacle obstacle : obstacles) {
             if (isCollided(obstacle, player)) {
                 gameScreen.setFailure(true);
             }
@@ -39,21 +39,19 @@ public class OverlapManagerImpl implements OverlapManager {
         Player player = gameScreen.getPlayer();
         List<PickUpItem> items = gameScreen.getItems();
 
-        for (PickUpItem item : items) {
-            if (isCollided(item, player)) {
-                player.setItem(item);
-            }
-        }
-
-        items.remove(player.getItem());
+        items.stream()
+                .filter(i -> !i.isPickedUp())
+                .filter(i -> isCollided(player, i))
+                .findFirst()
+                .ifPresent(player::setItem);
     }
 
     private void checkBulletOverlapping() {
-        List<Obstacle> obstacles = gameScreen.getObstacles();
+        List<AbstractObstacle> obstacles = gameScreen.getObstacles();
         List<Bullet> bullets = gameScreen.getBullets();
 
         for (Bullet bullet : bullets) {
-            for (Obstacle obstacle : obstacles) {
+            for (AbstractObstacle obstacle : obstacles) {
                 if (isCollided(obstacle, bullet)) {
                     bullet.hit();
                     obstacle.explode();

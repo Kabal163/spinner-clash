@@ -6,5 +6,5 @@ public enum State {
     NOT_PICKED_UP,
     PICKED_UP,
     EXPIRED,
-    OUT_OF_GAME
+    OUTSIDER
 }

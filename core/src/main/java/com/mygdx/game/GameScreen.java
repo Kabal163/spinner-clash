@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entity.Background;
 import com.mygdx.game.entity.Explosion;
 import com.mygdx.game.entity.GameOverLabel;
-import com.mygdx.game.entity.Obstacle;
+import com.mygdx.game.entity.obstacle.AbstractObstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
 import com.mygdx.game.entity.item.PickUpItem;
@@ -30,7 +30,7 @@ public class GameScreen extends AbstractScreen {
     private Background background;
     private Player player;
     private Explosion explosion;
-    private List<Obstacle> obstacles;
+    private List<AbstractObstacle> obstacles;
     private List<PickUpItem> items;
     private List<Bullet> bullets;
     private ScoreLabel scoreLabel;
@@ -102,22 +102,22 @@ public class GameScreen extends AbstractScreen {
             creationManager.createLaser();
         }
 
-        obstacles.removeIf(o -> o.isOutOfGame() || o.isExploded());
-        bullets.removeIf(b -> b.isOutOfGame() || LANDED.equals(b.getState()));
-        items.removeIf(i -> i.isOutOfGame() || i.isExpired());
-
         player.update(localDelta);
-        for (Obstacle obstacle : obstacles) {
+
+        for (AbstractObstacle obstacle : obstacles) {
             obstacle.update(localDelta);
         }
+        obstacles.removeIf(o -> o.isOutOfGame() || o.isExploded());
 
         for (PickUpItem item : items) {
             item.update(localDelta);
         }
+        items.removeIf(i -> i.isOutOfGame() || i.isExpired());
 
         for (Bullet bullet : bullets) {
             bullet.update(localDelta);
         }
+        bullets.removeIf(b -> b.isOutOfGame() || LANDED.equals(b.getState()));
 
         scoreLabel.update(localDelta);
     }
@@ -143,7 +143,7 @@ public class GameScreen extends AbstractScreen {
 
         player.draw(game.batch);
 
-        for (Obstacle obstacle : obstacles) {
+        for (AbstractObstacle obstacle : obstacles) {
             obstacle.draw(game.batch);
         }
 

@@ -21,7 +21,7 @@ import static com.mygdx.game.entity.item.bullet.Event.FLY_AWAY;
 import static com.mygdx.game.entity.item.bullet.Event.HIT;
 import static com.mygdx.game.entity.item.bullet.Event.UPDATE;
 import static com.mygdx.game.entity.item.bullet.State.INIT;
-import static com.mygdx.game.entity.item.bullet.State.OUT_OF_GAME;
+import static com.mygdx.game.entity.item.bullet.State.OUTSIDER;
 import static java.util.Collections.singletonMap;
 import static com.mygdx.game.entity.item.bullet.lifecycle.Constants.DELTA;
 
@@ -83,7 +83,7 @@ public class Bullet implements GameObject, StatefulObject<State> {
 
     @Override
     public boolean isOutOfGame() {
-        return OUT_OF_GAME.equals(state);
+        return OUTSIDER.equals(state);
     }
 
     /**

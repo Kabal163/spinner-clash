@@ -4,6 +4,6 @@ public enum State {
 
     INIT,
     MOVING,
-    OUT_OF_GAME,
+    OUTSIDER,
     LANDED
 }

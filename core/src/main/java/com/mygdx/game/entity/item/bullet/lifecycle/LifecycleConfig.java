@@ -2,7 +2,6 @@ package com.mygdx.game.entity.item.bullet.lifecycle;
 
 import com.mygdx.game.entity.item.bullet.Event;
 import com.mygdx.game.entity.item.bullet.State;
-import com.mygdx.game.entity.item.bullet.lifecycle.action.AddBulletToGameScreenAction;
 import com.mygdx.game.entity.item.bullet.lifecycle.action.CreateAnimationAction;
 import com.mygdx.game.entity.item.bullet.lifecycle.action.CreateSpriteAction;
 import com.mygdx.game.entity.item.bullet.lifecycle.action.SetStartPositionAction;
@@ -19,7 +18,7 @@ import static com.mygdx.game.entity.item.bullet.Event.UPDATE;
 import static com.mygdx.game.entity.item.bullet.State.INIT;
 import static com.mygdx.game.entity.item.bullet.State.LANDED;
 import static com.mygdx.game.entity.item.bullet.State.MOVING;
-import static com.mygdx.game.entity.item.bullet.State.OUT_OF_GAME;
+import static com.mygdx.game.entity.item.bullet.State.OUTSIDER;
 
 public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
 
@@ -28,7 +27,6 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
     private Action<State, Event> createAnimationAction;
     private Action<State, Event> createSpriteAction;
     private Action<State, Event> updatePosition;
-    private Action<State, Event> addBulletToGameScreenAction;
 
     public LifecycleConfig() {
         setStartPositionAction = new SetStartPositionAction();
@@ -36,7 +34,6 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
         createAnimationAction = new CreateAnimationAction();
         createSpriteAction = new CreateSpriteAction();
         updatePosition = new UpdatePositionAction();
-        addBulletToGameScreenAction = new AddBulletToGameScreenAction();
     }
 
     @Override
@@ -50,7 +47,6 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .action(createSpriteAction)
                 .action(setStartPositionAction)
                 .action(createAnimationAction)
-                .action(addBulletToGameScreenAction)
 
                 .with()
                 .sourceState(MOVING)
@@ -65,7 +61,18 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
 
                 .with()
                 .sourceState(MOVING)
-                .targetState(OUT_OF_GAME)
-                .event(FLY_AWAY);
+                .targetState(OUTSIDER)
+                .event(FLY_AWAY)
+
+                // All bullets will be removed from the screen on the next game loop iteration
+                .with()
+                .sourceState(LANDED)
+                .targetState(LANDED)
+                .event(UPDATE)
+
+                .with()
+                .sourceState(OUTSIDER)
+                .targetState(OUTSIDER)
+                .event(UPDATE);
     }
 }

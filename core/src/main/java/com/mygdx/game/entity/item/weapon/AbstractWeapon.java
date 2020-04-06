@@ -14,8 +14,6 @@ import com.mygdx.game.lifecycle.api.StatefulObject;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
-
 import static com.mygdx.game.Config.WEAPON_LIFE_LENGTH;
 import static com.mygdx.game.entity.item.weapon.Event.CREATE;
 import static com.mygdx.game.entity.item.weapon.Event.DROP;
@@ -25,7 +23,7 @@ import static com.mygdx.game.entity.item.weapon.Event.UPDATE;
 import static com.mygdx.game.entity.item.weapon.State.EXPIRED;
 import static com.mygdx.game.entity.item.weapon.State.INIT;
 import static com.mygdx.game.entity.item.weapon.State.NOT_PICKED_UP;
-import static com.mygdx.game.entity.item.weapon.State.OUT_OF_GAME;
+import static com.mygdx.game.entity.item.weapon.State.OUTSIDER;
 import static com.mygdx.game.entity.item.weapon.State.PICKED_UP;
 import static com.mygdx.game.entity.item.weapon.lifecycle.Constants.DELTA;
 import static java.util.Collections.singletonMap;
@@ -90,7 +88,7 @@ public abstract class AbstractWeapon implements PickUpItem, StatefulObject<State
 
     @Override
     public boolean isOutOfGame() {
-        return OUT_OF_GAME.equals(state);
+        return OUTSIDER.equals(state);
     }
 
     @Override

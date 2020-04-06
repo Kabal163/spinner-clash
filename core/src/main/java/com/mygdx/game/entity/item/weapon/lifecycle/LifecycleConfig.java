@@ -2,12 +2,12 @@ package com.mygdx.game.entity.item.weapon.lifecycle;
 
 import com.mygdx.game.entity.item.weapon.Event;
 import com.mygdx.game.entity.item.weapon.State;
-import com.mygdx.game.entity.item.weapon.lifecycle.action.AddWeaponToGameScreenAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.CreateSpriteAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.SetSizeAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.SetStartPositionAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.SetVelocityAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.UpdatePositionAction;
+import com.mygdx.game.entity.item.weapon.lifecycle.action.UpdateTimeElapsedAction;
 import com.mygdx.game.lifecycle.TransitionConfigurer;
 import com.mygdx.game.lifecycle.api.Action;
 import com.mygdx.game.lifecycle.api.LifecycleConfiguration;
@@ -18,9 +18,10 @@ import static com.mygdx.game.entity.item.weapon.Event.EXPIRE;
 import static com.mygdx.game.entity.item.weapon.Event.FLY_AWAY;
 import static com.mygdx.game.entity.item.weapon.Event.PICK_UP;
 import static com.mygdx.game.entity.item.weapon.Event.UPDATE;
+import static com.mygdx.game.entity.item.weapon.State.EXPIRED;
 import static com.mygdx.game.entity.item.weapon.State.INIT;
 import static com.mygdx.game.entity.item.weapon.State.NOT_PICKED_UP;
-import static com.mygdx.game.entity.item.weapon.State.OUT_OF_GAME;
+import static com.mygdx.game.entity.item.weapon.State.OUTSIDER;
 import static com.mygdx.game.entity.item.weapon.State.PICKED_UP;
 
 public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
@@ -30,7 +31,7 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
     private Action<State, Event> setStartPositionAction;
     private Action<State, Event> setVelocityAction;
     private Action<State, Event> updatePositionAction;
-    private Action<State, Event> addWeaponToGameScreenAction;
+    private Action<State, Event> updateTimeElapsedAction;
 
     public LifecycleConfig() {
         createSpriteAction = new CreateSpriteAction();
@@ -38,7 +39,7 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
         setStartPositionAction = new SetStartPositionAction();
         setVelocityAction = new SetVelocityAction();
         updatePositionAction = new UpdatePositionAction();
-        addWeaponToGameScreenAction = new AddWeaponToGameScreenAction();
+        updateTimeElapsedAction = new UpdateTimeElapsedAction();
     }
 
     @Override
@@ -52,17 +53,17 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .action(setSizeAction)
                 .action(setStartPositionAction)
                 .action(setVelocityAction)
-                .action(addWeaponToGameScreenAction)
 
                 .with()
                 .sourceState(NOT_PICKED_UP)
                 .targetState(NOT_PICKED_UP)
                 .event(UPDATE)
                 .action(updatePositionAction)
+                .action(updateTimeElapsedAction)
 
                 .with()
                 .sourceState(NOT_PICKED_UP)
-                .targetState(NOT_PICKED_UP)
+                .targetState(EXPIRED)
                 .event(EXPIRE)
 
                 .with()
@@ -73,16 +74,33 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .with()
                 .sourceState(PICKED_UP)
                 .targetState(PICKED_UP)
+                .event(UPDATE)
+                .action(updateTimeElapsedAction)
+
+                .with()
+                .sourceState(PICKED_UP)
+                .targetState(EXPIRED)
                 .event(EXPIRE)
 
                 .with()
                 .sourceState(NOT_PICKED_UP)
-                .targetState(OUT_OF_GAME)
+                .targetState(OUTSIDER)
                 .event(FLY_AWAY)
 
                 .with()
                 .sourceState(PICKED_UP)
                 .targetState(NOT_PICKED_UP)
-                .event(DROP);
+                .event(DROP)
+
+                // All bullets will be removed from the screen on the next game loop iteration
+                .with()
+                .sourceState(EXPIRED)
+                .targetState(EXPIRED)
+                .event(UPDATE)
+
+                .with()
+                .sourceState(OUTSIDER)
+                .targetState(OUTSIDER)
+                .event(UPDATE);
     }
 }

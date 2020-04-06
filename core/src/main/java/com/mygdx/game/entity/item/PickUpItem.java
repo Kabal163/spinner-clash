@@ -1,8 +1,9 @@
 package com.mygdx.game.entity.item;
 
+import com.mygdx.game.entity.Expirable;
 import com.mygdx.game.entity.GameObject;
 
-public interface PickUpItem extends GameObject {
+public interface PickUpItem extends GameObject, Expirable {
 
     void use();
 
@@ -11,6 +12,4 @@ public interface PickUpItem extends GameObject {
     void drop();
 
     boolean isPickedUp();
-
-    boolean isExpired();
 }

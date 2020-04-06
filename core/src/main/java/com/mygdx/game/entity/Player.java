@@ -30,7 +30,6 @@ public class Player implements GameObject {
     private final Sprite sprite;
     private static TextureRegion texture;
     private PickUpItem item;
-    private boolean useItem;
 
     public Player(SpinnerGame gameContext) {
         if (texture == null) {
@@ -107,6 +106,7 @@ public class Player implements GameObject {
     }
 
     public void setItem(PickUpItem item) {
+        this.item.drop();
         this.item = item;
         item.pickUp();
     }
