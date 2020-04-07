@@ -34,9 +34,9 @@ public final class Config {
 
     public static final float DEFAULT_FRAME_LENGTH = 0.2f;
 
-    public static final float EXPLOSION_FRAME_LENGTH = 0.08f;
-    public static final int EXPLOSION_HEIGHT = 130;
-    public static final int EXPLOSION_WIDTH = 130;
+    public static final float EXPLOSION_FRAME_LENGTH = 0.06f;
+    public static final int EXPLOSION_HEIGHT = 192;
+    public static final int EXPLOSION_WIDTH = 192;
 
     public static final int NUMBER_WIDTH = 81;
     public static final int NUMBER_HEIGHT = 78;

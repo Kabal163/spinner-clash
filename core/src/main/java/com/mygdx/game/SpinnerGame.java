@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lombok.SneakyThrows;
 
@@ -16,11 +15,5 @@ public class SpinnerGame extends Game {
         this.batch = new SpriteBatch();
         setScreen(new MenuScreen(this));
         lifecycleManagerFactory = new LifecycleManagerFactoryImpl();
-    }
-
-    @Override
-    public void setScreen(Screen screen) {
-        super.setScreen(screen);
-
     }
 }

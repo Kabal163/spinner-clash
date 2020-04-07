@@ -30,6 +30,7 @@ public class GameScreen extends AbstractScreen {
     private Background background;
     private Player player;
     private Explosion explosion;
+    private List<Explosion> obstacleExplosions;
     private List<AbstractObstacle> obstacles;
     private List<PickUpItem> items;
     private List<Bullet> bullets;
@@ -67,6 +68,7 @@ public class GameScreen extends AbstractScreen {
         obstacles = new ArrayList<>();
         items = new ArrayList<>();
         bullets = new ArrayList<>();
+        obstacleExplosions = new ArrayList<>();
         overlapManager = new OverlapManagerImpl(this);
         outsiderManager = new OutsiderManagerImpl(this);
         passingManager = new PassingManagerImpl(this);
@@ -130,6 +132,11 @@ public class GameScreen extends AbstractScreen {
         }
         bullets.removeIf(b -> b.isOutsider() || LANDED.equals(b.getState()));
 
+        for (Explosion obstacleExplosion : obstacleExplosions) {
+            obstacleExplosion.update(localDelta);
+        }
+        obstacleExplosions.removeIf(Explosion::isEnded);
+
         scoreLabel.update(localDelta);
     }
 
@@ -164,6 +171,10 @@ public class GameScreen extends AbstractScreen {
 
         for (Bullet bullet : bullets) {
             bullet.draw(game.batch);
+        }
+
+        for (Explosion obstacleExplosion : obstacleExplosions) {
+            obstacleExplosion.draw(game.batch);
         }
 
         game.batch.end();

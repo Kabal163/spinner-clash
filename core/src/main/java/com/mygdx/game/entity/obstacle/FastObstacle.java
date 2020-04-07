@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.SpinnerGame;
 
+import static com.mygdx.game.Assets.EXPLOSION;
 import static com.mygdx.game.Assets.OBSTACLE_2;
 import static com.mygdx.game.Config.FAST_OBSTACLE_SCORE;
 import static com.mygdx.game.Config.FAST_OBSTACLE_VELOCITY;
@@ -13,7 +14,8 @@ import static com.mygdx.game.Config.FAST_OBSTACLE_VELOCITY;
  */
 public class FastObstacle extends AbstractObstacle {
 
-    private static TextureRegion texture = new TextureRegion(new Texture(OBSTACLE_2));
+    private static TextureRegion obstacleTexture = new TextureRegion(new Texture(OBSTACLE_2));
+    private static TextureRegion explosionTexture = new TextureRegion(new Texture(EXPLOSION));
 
     public FastObstacle(SpinnerGame gameContext) {
         super(gameContext);
@@ -27,6 +29,6 @@ public class FastObstacle extends AbstractObstacle {
 
     @Override
     public TextureRegion getTexture() {
-        return texture;
+        return obstacleTexture;
     }
 }
