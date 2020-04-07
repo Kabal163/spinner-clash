@@ -52,7 +52,7 @@ public abstract class AbstractWeapon implements PickUpItem, StatefulObject<State
         lifecycleManager = gameContext.lifecycleManagerFactory.newInstance(this.getClass());
         sprite = new Sprite(getTexture());
         velocity = WEAPON_VELOCITY;
-
+        position = new Vector2();
         state = INIT;
     }
 

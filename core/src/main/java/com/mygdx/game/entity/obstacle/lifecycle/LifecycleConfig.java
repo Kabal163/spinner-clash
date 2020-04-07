@@ -53,6 +53,7 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .targetState(PASSED)
                 .event(PASS)
                 .action(resetStateTime)
+                .action(recountScoreAction)
 
                 .with()
                 .sourceState(MOVING)
@@ -78,7 +79,11 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .targetState(PASSED)
                 .event(UPDATE)
                 .action(updatePositionAction)
-                .action(recountScoreAction)
+
+                .with()
+                .sourceState(PASSED)
+                .targetState(OUTSIDER)
+                .event(FLY_AWAY)
 
                 // All bullets will be removed from the screen on the next game loop iteration
                 .with()

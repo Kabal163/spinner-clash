@@ -54,6 +54,7 @@ public class Bullet implements GameObject, StatefulObject<State>, Outsider, Size
         sprite = new Sprite(texture);
         stateTime = 0;
         velocity = DEFAULT_BULLET_VELOCITY;
+        position = new Vector2();
         state = INIT;
     }
 

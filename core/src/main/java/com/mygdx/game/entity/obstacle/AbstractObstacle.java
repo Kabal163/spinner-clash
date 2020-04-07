@@ -59,6 +59,7 @@ public abstract class AbstractObstacle implements
         stateTime = 0;
         lifeTime = 0;
         sprite = new Sprite(getTexture());
+        position = new Vector2();
         state = INIT;
     }
 

@@ -37,6 +37,7 @@ public class GameScreen extends AbstractScreen {
     private GameOverLabel gameOverLabel;
     private OverlapManager overlapManager;
     private OutsiderManager outsiderManager;
+    private PassingManager passingManager;
 
     private float obstacleCreationTimeElapsed;
     private float weaponCreationTimeElapsed;
@@ -68,6 +69,7 @@ public class GameScreen extends AbstractScreen {
         bullets = new ArrayList<>();
         overlapManager = new OverlapManagerImpl(this);
         outsiderManager = new OutsiderManagerImpl(this);
+        passingManager = new PassingManagerImpl(this);
 
         scoreLabel = new ScoreLabel(this);
         gameOverLabel = new GameOverLabel();
@@ -83,6 +85,9 @@ public class GameScreen extends AbstractScreen {
         cleanGameObjects();
 
         overlapManager.update(localDelta);
+        cleanGameObjects();
+
+        passingManager.update(localDelta);
         cleanGameObjects();
 
         if (failure) {
