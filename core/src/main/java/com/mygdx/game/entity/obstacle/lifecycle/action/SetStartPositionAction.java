@@ -1,7 +1,7 @@
 package com.mygdx.game.entity.obstacle.lifecycle.action;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.entity.obstacle.AbstractObstacle;
 import com.mygdx.game.entity.obstacle.Event;
 import com.mygdx.game.entity.obstacle.State;
@@ -19,9 +19,8 @@ public class SetStartPositionAction implements Action<State, Event> {
     @Override
     public void execute(StateContext<State, Event> context) {
         AbstractObstacle obstacle = context.getStatefulObject();
-        Sprite sprite = obstacle.getSprite();
 
-        float startYPos = MathUtils.random(MIN_Y_POS, VIEW_HEIGHT - sprite.getHeight());
-        sprite.setPosition(START_X_POS, startYPos);
+        float startYPos = MathUtils.random(MIN_Y_POS, VIEW_HEIGHT - obstacle.getHeight());
+        obstacle.setPosition(START_X_POS, startYPos);
     }
 }

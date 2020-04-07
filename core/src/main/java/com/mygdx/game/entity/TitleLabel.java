@@ -55,9 +55,4 @@ public class TitleLabel implements GameObject {
     public ObjectTag getTag() {
         return LABEL;
     }
-
-    @Override
-    public boolean isOutOfGame() {
-        return false;
-    }
 }

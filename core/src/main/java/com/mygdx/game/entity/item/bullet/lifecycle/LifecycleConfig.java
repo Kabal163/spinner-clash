@@ -3,9 +3,7 @@ package com.mygdx.game.entity.item.bullet.lifecycle;
 import com.mygdx.game.entity.item.bullet.Event;
 import com.mygdx.game.entity.item.bullet.State;
 import com.mygdx.game.entity.item.bullet.lifecycle.action.CreateAnimationAction;
-import com.mygdx.game.entity.item.bullet.lifecycle.action.CreateSpriteAction;
 import com.mygdx.game.entity.item.bullet.lifecycle.action.SetStartPositionAction;
-import com.mygdx.game.entity.item.bullet.lifecycle.action.SetVelocityAction;
 import com.mygdx.game.entity.item.bullet.lifecycle.action.UpdatePositionAction;
 import com.mygdx.game.lifecycle.TransitionConfigurer;
 import com.mygdx.game.lifecycle.api.Action;
@@ -23,16 +21,12 @@ import static com.mygdx.game.entity.item.bullet.State.OUTSIDER;
 public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
 
     private Action<State, Event> setStartPositionAction;
-    private Action<State, Event> setVelocityAction;
     private Action<State, Event> createAnimationAction;
-    private Action<State, Event> createSpriteAction;
     private Action<State, Event> updatePosition;
 
     public LifecycleConfig() {
         setStartPositionAction = new SetStartPositionAction();
-        setVelocityAction = new SetVelocityAction();
         createAnimationAction = new CreateAnimationAction();
-        createSpriteAction = new CreateSpriteAction();
         updatePosition = new UpdatePositionAction();
     }
 
@@ -43,8 +37,6 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .sourceState(INIT)
                 .targetState(MOVING)
                 .event(CREATE)
-                .action(setVelocityAction)
-                .action(createSpriteAction)
                 .action(setStartPositionAction)
                 .action(createAnimationAction)
 

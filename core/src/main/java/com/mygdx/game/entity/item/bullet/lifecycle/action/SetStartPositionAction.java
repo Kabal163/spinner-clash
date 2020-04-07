@@ -25,7 +25,8 @@ public class SetStartPositionAction implements Action<State, Event> {
 
         Rectangle player = gameScreen.getPlayer().getCollider();
 
-        bullet.getSprite().setX(player.getX() + player.getWidth() / 2);
-        bullet.getSprite().setY(player.getY() + player.getHeight() / 3);
+        bullet.setPosition(
+                player.getX() + player.getWidth() / 2,
+                player.getY() + player.getHeight() / 3);
     }
 }

@@ -88,11 +88,6 @@ public class Player implements GameObject {
         return PLAYER;
     }
 
-    @Override
-    public boolean isOutOfGame() {
-        return false;
-    }
-
     public float getX() {
         return sprite.getX();
     }

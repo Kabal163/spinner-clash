@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entity.Background;
 import com.mygdx.game.entity.Explosion;
 import com.mygdx.game.entity.GameOverLabel;
-import com.mygdx.game.entity.obstacle.AbstractObstacle;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.ScoreLabel;
 import com.mygdx.game.entity.item.PickUpItem;
 import com.mygdx.game.entity.item.bullet.Bullet;
+import com.mygdx.game.entity.obstacle.AbstractObstacle;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +36,7 @@ public class GameScreen extends AbstractScreen {
     private ScoreLabel scoreLabel;
     private GameOverLabel gameOverLabel;
     private OverlapManager overlapManager;
+    private OutsiderManager outsiderManager;
 
     private float obstacleCreationTimeElapsed;
     private float weaponCreationTimeElapsed;
@@ -66,6 +67,7 @@ public class GameScreen extends AbstractScreen {
         items = new ArrayList<>();
         bullets = new ArrayList<>();
         overlapManager = new OverlapManagerImpl(this);
+        outsiderManager = new OutsiderManagerImpl(this);
 
         scoreLabel = new ScoreLabel(this);
         gameOverLabel = new GameOverLabel();
@@ -77,7 +79,11 @@ public class GameScreen extends AbstractScreen {
         if (pause) {
             return;
         }
+        outsiderManager.update(localDelta);
+        cleanGameObjects();
+
         overlapManager.update(localDelta);
+        cleanGameObjects();
 
         if (failure) {
             if (explosion == null) {
@@ -107,17 +113,17 @@ public class GameScreen extends AbstractScreen {
         for (AbstractObstacle obstacle : obstacles) {
             obstacle.update(localDelta);
         }
-        obstacles.removeIf(o -> o.isOutOfGame() || o.isExploded());
+        obstacles.removeIf(o -> o.isOutsider() || o.isExploded());
 
         for (PickUpItem item : items) {
             item.update(localDelta);
         }
-        items.removeIf(i -> i.isOutOfGame() || i.isExpired());
+        items.removeIf(i -> i.isOutsider() || i.isExpired());
 
         for (Bullet bullet : bullets) {
             bullet.update(localDelta);
         }
-        bullets.removeIf(b -> b.isOutOfGame() || LANDED.equals(b.getState()));
+        bullets.removeIf(b -> b.isOutsider() || LANDED.equals(b.getState()));
 
         scoreLabel.update(localDelta);
     }
@@ -206,5 +212,11 @@ public class GameScreen extends AbstractScreen {
 
     private void togglePause() {
         pause = !pause;
+    }
+
+    private void cleanGameObjects() {
+        obstacles.removeIf(o -> o.isOutsider() || o.isExploded());
+        items.removeIf(i -> i.isOutsider() || i.isExpired());
+        bullets.removeIf(b -> b.isOutsider() || LANDED.equals(b.getState()));
     }
 }

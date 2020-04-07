@@ -1,6 +1,6 @@
 package com.mygdx.game.entity.obstacle.lifecycle.action;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.entity.obstacle.AbstractObstacle;
 import com.mygdx.game.entity.obstacle.Event;
 import com.mygdx.game.entity.obstacle.State;
@@ -15,9 +15,10 @@ public class UpdatePositionAction implements Action<State, Event> {
     @Override
     public void execute(StateContext<State, Event> context) {
         AbstractObstacle obstacle = context.getStatefulObject();
-        Sprite sprite = obstacle.getSprite();
         Float delta = context.getVariable(DELTA, Float.class);
+        Vector2 pos = obstacle.getPosition();
 
-        sprite.setX(sprite.getX() + obstacle.getVelocity() * clamp(delta, delta, 1/30f));
+        float x = pos.x + obstacle.getVelocity() * clamp(delta, delta, 1/30f);
+        obstacle.setPosition(x, pos.y);
     }
 }

@@ -46,14 +46,14 @@ public class ScoreLabel implements GameObject {
     public void update(float delta) {
         toBeDrawn = new ArrayList<>();
 
-        gameScreen.getObstacles().stream()
-                .filter(o -> !o.isPassed())
-                .forEach(o -> {
-                    if (o.getX() < gameScreen.getPlayer().getX()) {
-                        score = score + o.getScore();
-                        o.pass();
-                    }
-                });
+//        gameScreen.getObstacles().stream()
+//                .filter(o -> !o.isPassed())
+//                .forEach(o -> {
+//                    if (o.getX() < gameScreen.getPlayer().getX()) {
+//                        score = score + o.getScore();
+//                        o.pass();
+//                    }
+//                });
 
         char[] chars = String
                 .valueOf(score)
@@ -96,8 +96,7 @@ public class ScoreLabel implements GameObject {
         return LABEL;
     }
 
-    @Override
-    public boolean isOutOfGame() {
-        return false;
+    public void increaseScore(int delta) {
+        score += delta;
     }
 }

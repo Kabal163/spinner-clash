@@ -2,10 +2,8 @@ package com.mygdx.game.entity.item.weapon.lifecycle;
 
 import com.mygdx.game.entity.item.weapon.Event;
 import com.mygdx.game.entity.item.weapon.State;
-import com.mygdx.game.entity.item.weapon.lifecycle.action.CreateSpriteAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.SetSizeAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.SetStartPositionAction;
-import com.mygdx.game.entity.item.weapon.lifecycle.action.SetVelocityAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.UpdatePositionAction;
 import com.mygdx.game.entity.item.weapon.lifecycle.action.UpdateTimeElapsedAction;
 import com.mygdx.game.lifecycle.TransitionConfigurer;
@@ -26,18 +24,14 @@ import static com.mygdx.game.entity.item.weapon.State.PICKED_UP;
 
 public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
 
-    private Action<State, Event> createSpriteAction;
     private Action<State, Event> setSizeAction;
     private Action<State, Event> setStartPositionAction;
-    private Action<State, Event> setVelocityAction;
     private Action<State, Event> updatePositionAction;
     private Action<State, Event> updateTimeElapsedAction;
 
     public LifecycleConfig() {
-        createSpriteAction = new CreateSpriteAction();
         setSizeAction = new SetSizeAction();
         setStartPositionAction = new SetStartPositionAction();
-        setVelocityAction = new SetVelocityAction();
         updatePositionAction = new UpdatePositionAction();
         updateTimeElapsedAction = new UpdateTimeElapsedAction();
     }
@@ -49,10 +43,8 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .sourceState(INIT)
                 .targetState(NOT_PICKED_UP)
                 .event(CREATE)
-                .action(createSpriteAction)
                 .action(setSizeAction)
                 .action(setStartPositionAction)
-                .action(setVelocityAction)
 
                 .with()
                 .sourceState(NOT_PICKED_UP)

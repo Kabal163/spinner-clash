@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameUtil;
 import com.mygdx.game.SpinnerGame;
 import com.mygdx.game.entity.GameObject;
@@ -15,9 +16,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import static com.mygdx.game.Config.WEAPON_LIFE_LENGTH;
+import static com.mygdx.game.Config.WEAPON_VELOCITY;
 import static com.mygdx.game.entity.item.weapon.Event.CREATE;
 import static com.mygdx.game.entity.item.weapon.Event.DROP;
 import static com.mygdx.game.entity.item.weapon.Event.EXPIRE;
+import static com.mygdx.game.entity.item.weapon.Event.FLY_AWAY;
 import static com.mygdx.game.entity.item.weapon.Event.PICK_UP;
 import static com.mygdx.game.entity.item.weapon.Event.UPDATE;
 import static com.mygdx.game.entity.item.weapon.State.EXPIRED;
@@ -39,10 +42,16 @@ public abstract class AbstractWeapon implements PickUpItem, StatefulObject<State
     protected Sprite sprite;
     protected float velocity;
     protected float timeElapsed;
+    protected Vector2 position;
+    protected float width;
+    protected float height;
+
 
     public AbstractWeapon(SpinnerGame gameContext) {
         this.gameContext = gameContext;
         lifecycleManager = gameContext.lifecycleManagerFactory.newInstance(this.getClass());
+        sprite = new Sprite(getTexture());
+        velocity = WEAPON_VELOCITY;
 
         state = INIT;
     }
@@ -87,8 +96,13 @@ public abstract class AbstractWeapon implements PickUpItem, StatefulObject<State
     }
 
     @Override
-    public boolean isOutOfGame() {
+    public boolean isOutsider() {
         return OUTSIDER.equals(state);
+    }
+
+    @Override
+    public void markOutsider() {
+        lifecycleManager.execute(this, FLY_AWAY);
     }
 
     @Override
@@ -112,4 +126,23 @@ public abstract class AbstractWeapon implements PickUpItem, StatefulObject<State
     }
 
     public abstract TextureRegion getTexture();
+
+    @Override
+    public Vector2 getPosition() {
+        return new Vector2(position);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        position.x = x;
+        position.y = y;
+        sprite.setPosition(x, y);
+    }
+
+    @Override
+    public void setSize(float width, float height) {
+        this.width = width;
+        this.height = height;
+        sprite.setSize(width, height);
+    }
 }

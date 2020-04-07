@@ -19,14 +19,10 @@ import static com.mygdx.game.entity.item.weapon.State.PICKED_UP;
  */
 public class DummyWeapon extends AbstractWeapon {
 
-    private static TextureRegion texture;
+    private static TextureRegion texture = new TextureRegion(new Texture(LASER));
 
     public DummyWeapon(SpinnerGame gameContext) {
         super(gameContext);
-
-        if (texture == null) {
-            texture = new TextureRegion(new Texture(LASER));
-        }
     }
 
     @Override

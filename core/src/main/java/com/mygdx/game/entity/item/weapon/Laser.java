@@ -20,14 +20,10 @@ import static com.mygdx.game.entity.item.weapon.State.PICKED_UP;
 
 public class Laser extends AbstractWeapon {
 
-    private static TextureRegion texture;
+    private static TextureRegion texture = new TextureRegion(new Texture(LASER));
 
     public Laser(SpinnerGame gameContext) {
         super(gameContext);
-
-        if (texture == null) {
-            texture = new TextureRegion(new Texture(LASER));
-        }
     }
 
     @Override
