@@ -15,14 +15,10 @@ import static com.mygdx.game.Config.SIMPLE_OBSTACLE_VELOCITY;
  */
 public class SimpleObstacle extends AbstractObstacle {
 
-    protected static TextureRegion texture;
+    protected static TextureRegion texture = new TextureRegion(new Texture(OBSTACLE_1));
 
     public SimpleObstacle(SpinnerGame gameContext) {
         super(gameContext);
-
-        if (texture == null) {
-            texture = new TextureRegion(new Texture(OBSTACLE_1));
-        }
         velocity = SIMPLE_OBSTACLE_VELOCITY;
     }
 

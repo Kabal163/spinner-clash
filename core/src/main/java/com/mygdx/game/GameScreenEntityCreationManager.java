@@ -39,17 +39,18 @@ public class GameScreenEntityCreationManager implements EntityCreationManager {
         gameScreen.setObstacleCreationTimeElapsed(0);
         AbstractObstacle obstacle;
         if ((int) gameScreen.getFastObstacleCreationTimeElapsed() > 7) {
-            obstacle = new FastObstacle(gameScreen);
+            obstacle = new FastObstacle(gameScreen.game);
             gameScreen.setFastObstacleCreationTimeElapsed(0);
         } else {
-            obstacle = new SimpleObstacle(gameScreen);
+            obstacle = new SimpleObstacle(gameScreen.game);
         }
+        obstacle.create();
 
         if (gameScreen.getLastAccelerationTimeElapsed() > 5) {
             gameScreen.setLastAccelerationTimeElapsed(0);
             gameScreen.setAccelerationCount(gameScreen.getAccelerationCount() + 1);
         }
-        obstacle.increaseVelocity(-10 * gameScreen.getAccelerationCount());
+        obstacle.accelerate(-10 * gameScreen.getAccelerationCount());
         gameScreen.getObstacles().add(obstacle);
 
         return obstacle;

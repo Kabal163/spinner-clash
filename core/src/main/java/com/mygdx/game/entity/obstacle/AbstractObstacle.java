@@ -14,6 +14,8 @@ import com.mygdx.game.lifecycle.api.StatefulObject;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
+
 import static com.mygdx.game.Config.DEFAULT_OBSTACLE_VELOCITY;
 import static com.mygdx.game.entity.ObjectTag.OBSTACLE;
 import static com.mygdx.game.entity.obstacle.Event.CREATE;
@@ -21,8 +23,11 @@ import static com.mygdx.game.entity.obstacle.Event.EXPLODE;
 import static com.mygdx.game.entity.obstacle.Event.PASS;
 import static com.mygdx.game.entity.obstacle.Event.UPDATE;
 import static com.mygdx.game.entity.obstacle.State.EXPLODED;
+import static com.mygdx.game.entity.obstacle.State.INIT;
 import static com.mygdx.game.entity.obstacle.State.OUTSIDER;
 import static com.mygdx.game.entity.obstacle.State.PASSED;
+import static com.mygdx.game.entity.obstacle.lifecycle.Constants.DELTA;
+import static java.util.Collections.singletonMap;
 
 @Getter
 @Setter
@@ -44,6 +49,7 @@ public abstract class AbstractObstacle implements GameObject, StatefulObject<Sta
         stateTime = 0;
         lifeTime = 0;
         sprite = new Sprite(getTexture());
+        state = INIT;
     }
 
     @Override
@@ -53,7 +59,7 @@ public abstract class AbstractObstacle implements GameObject, StatefulObject<Sta
 
     @Override
     public void update(float delta) {
-        lifecycleManager.execute(this, UPDATE);
+        lifecycleManager.execute(this, UPDATE, singletonMap(DELTA, delta));
     }
 
     @Override
@@ -77,7 +83,7 @@ public abstract class AbstractObstacle implements GameObject, StatefulObject<Sta
     }
 
     public void accelerate(float delta) {
-        this.velocity += velocity;
+        this.velocity += delta;
     }
 
     public float getX() {

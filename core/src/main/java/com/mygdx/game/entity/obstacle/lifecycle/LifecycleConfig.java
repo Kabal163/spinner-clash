@@ -73,6 +73,7 @@ public class LifecycleConfig implements LifecycleConfiguration<State, Event> {
                 .sourceState(PASSED)
                 .targetState(PASSED)
                 .event(UPDATE)
+                .action(updatePositionAction)
 
                 // All bullets will be removed from the screen on the next game loop iteration
                 .with()
